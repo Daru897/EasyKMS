@@ -9,17 +9,39 @@ if (Test-Path $envFile) {
     $requiredVars = @(
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_ROLE_KEY",
         "PINECONE_API_KEY",
-        "PINECONE_ENVIRONMENT",
-        "OPENAI_API_KEY"
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+    )
+    
+    $optionalVars = @(
+        "PINECONE_INDEX_NAME",
+        "GOOGLE_REDIRECT_URI",
+        "NEXT_PUBLIC_APP_URL",
+        "LLAMAPARSE_API_KEY",
+        "OPENAI_API_KEY",
+        "PRESIDIO_API_URL",
+        "GOOGLE_DRIVE_WEBHOOK_TOKEN"
     )
     
     $content = Get-Content $envFile
+    
+    Write-Host "`nRequired Variables:" -ForegroundColor Cyan
     foreach ($var in $requiredVars) {
         if ($content -match "^$var=") {
-            Write-Host "✓ $var is set" -ForegroundColor Green
+            Write-Host "  ✓ $var is set" -ForegroundColor Green
         } else {
-            Write-Host "✗ $var is missing" -ForegroundColor Red
+            Write-Host "  ✗ $var is missing" -ForegroundColor Red
+        }
+    }
+    
+    Write-Host "`nOptional Variables:" -ForegroundColor Cyan
+    foreach ($var in $optionalVars) {
+        if ($content -match "^$var=") {
+            Write-Host "  ✓ $var is set" -ForegroundColor Green
+        } else {
+            Write-Host "  ○ $var is not set (optional)" -ForegroundColor Gray
         }
     }
     

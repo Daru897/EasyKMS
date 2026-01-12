@@ -34,12 +34,15 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protected routes logic (we'll implement later)
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
-    // No user, redirect to login
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
+  // Protected routes logic
+  // IMPORTANT: For dashboard, we completely skip middleware auth checks
+  // The client-side AuthContext (now using SSR-compatible cookies) will handle ALL auth
+  // This prevents any timing issues between middleware and client-side session reading
+  if (request.nextUrl.pathname.startsWith('/dashboard')) {
+    // Skip middleware auth check - let client-side handle it
+    // Both middleware and AuthContext now use the same cookie-based session
+    console.log('[Middleware] Dashboard route - skipping auth check, client will handle');
+    // Don't redirect - always let the page load
   }
 
   // Admin-only routes

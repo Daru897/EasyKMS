@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:health": "node scripts/test-health.js",
+    "test:env": "powershell -ExecutionPolicy Bypass -File check-env.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -14,11 +16,13 @@
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-tabs": "^1.1.13",
+    "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.90.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
+    "googleapis": "^170.0.0",
     "inngest": "^3.49.0",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
