@@ -1,0 +1,39 @@
+app/api/google-drive/folders/route.ts(50,21): error TS2339: Property 'error' does not exist on type 'GaxiosResponseWithHTTP2<Schema$FileList>'.
+app/api/pinecone/test/route.ts(37,37): error TS2551: Property 'totalVectorCount' does not exist on type 'IndexStatsDescription'. Did you mean 'totalRecordCount'?
+app/api/pinecone/test/route.ts(172,13): error TS1117: An object literal cannot have multiple properties with the same name.
+inngest/functions.ts(64,28): error TS2339: Property 'error' does not exist on type 'GaxiosResponseWithHTTP2<Schema$FileList>'.
+inngest/functions.ts(88,11): error TS18049: 'file.name' is possibly 'null' or 'undefined'.
+inngest/ingestion.ts(48,49): error TS2345: Argument of type '{ type: "Buffer"; data: number[]; }' is not assignable to parameter of type 'BinaryLike'.
+inngest/ingestion.ts(83,40): error TS2339: Property 'existingVersionId' does not exist on type '{ isDuplicate: boolean; existingVersionId: any; } | { isDuplicate: boolean; }'.
+  Property 'existingVersionId' does not exist on type '{ isDuplicate: boolean; }'.
+inngest/ingestion.ts(90,34): error TS2345: Argument of type '{ type: "Buffer"; data: number[]; }' is not assignable to parameter of type 'Buffer<ArrayBufferLike>'.
+  Type '{ type: "Buffer"; data: number[]; }' is missing the following properties from type 'Buffer<ArrayBufferLike>': slice, subarray, write, toJSON, and 102 more.
+inngest/ingestion.ts(121,96): error TS2339: Property 'length' does not exist on type '{ type: "Buffer"; data: number[]; }'.
+inngest/ingestion.ts(158,64): error TS2345: Argument of type '{ type: "Buffer"; data: number[]; }' is not assignable to parameter of type 'BinaryLike'.
+inngest/ingestion.ts(169,40): error TS2339: Property 'length' does not exist on type '{ type: "Buffer"; data: number[]; }'.
+types/pinecone.ts(20,3): error TS2411: Property 'chunk_start_char' of type 'number | undefined' is not assignable to 'string' index type 'RecordMetadataValue'.
+types/pinecone.ts(21,3): error TS2411: Property 'chunk_end_char' of type 'number | undefined' is not assignable to 'string' index type 'RecordMetadataValue'.
+types/pinecone.ts(26,3): error TS2411: Property 'effective_date' of type 'string | undefined' is not assignable to 'string' index type 'RecordMetadataValue'.
+types/pinecone.ts(29,3): error TS2411: Property 'categories' of type 'string[] | undefined' is not assignable to 'string' index type 'RecordMetadataValue'.
+utils/google-oauth/server.ts(56,5): error TS2322: Type 'string | null' is not assignable to type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+utils/google-oauth/server.ts(57,5): error TS2322: Type 'string | null' is not assignable to type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+utils/google-oauth/server.ts(58,5): error TS2322: Type 'string | null' is not assignable to type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+utils/llamaparse.ts(67,28): error TS2322: Type 'Buffer<ArrayBufferLike>' is not assignable to type 'BlobPart'.
+  Type 'Buffer<ArrayBufferLike>' is not assignable to type 'ArrayBufferView<ArrayBuffer>'.
+    Types of property 'buffer' are incompatible.
+      Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+        Type 'SharedArrayBuffer' is missing the following properties from type 'ArrayBuffer': resizable, resize, detached, transfer, transferToFixedLength
+utils/pinecone/server.ts(5,3): error TS2724: '"@pinecone-database/pinecone"' has no exported member named 'UpsertResponse'. Did you mean 'QueryResponse'?
+utils/pinecone/server.ts(6,3): error TS2305: Module '"@pinecone-database/pinecone"' has no exported member 'DeleteResponse'.
+utils/pinecone/server.ts(157,79): error TS2554: Expected 1 arguments, but got 2.
+utils/pinecone/server.ts(211,50): error TS2554: Expected 0 arguments, but got 1.
+utils/supabase/server.ts(42,5): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(supabaseUrl: string, supabaseKey: string, options: SupabaseClientOptions<"public"> & { cookieOptions?: CookieOptionsWithName | undefined; cookies: CookieMethodsServerDeprecated; cookieEncoding?: "raw" | ... 1 more ... | undefined; }): SupabaseClient<...>', gave the following error.
+    Argument of type '{ auth: { autoRefreshToken: false; persistSession: false; }; }' is not assignable to parameter of type 'SupabaseClientOptions<"public"> & { cookieOptions?: CookieOptionsWithName | undefined; cookies: CookieMethodsServerDeprecated; cookieEncoding?: "raw" | ... 1 more ... | undefined; }'.
+      Property 'cookies' is missing in type '{ auth: { autoRefreshToken: false; persistSession: false; }; }' but required in type '{ cookieOptions?: CookieOptionsWithName | undefined; cookies: CookieMethodsServerDeprecated; cookieEncoding?: "raw" | "base64url" | undefined; }'.
+  Overload 2 of 2, '(supabaseUrl: string, supabaseKey: string, options: SupabaseClientOptions<"public"> & { cookieOptions?: CookieOptionsWithName | undefined; cookies: CookieMethodsServer; cookieEncoding?: "raw" | ... 1 more ... | undefined; }): SupabaseClient<...>', gave the following error.
+    Argument of type '{ auth: { autoRefreshToken: false; persistSession: false; }; }' is not assignable to parameter of type 'SupabaseClientOptions<"public"> & { cookieOptions?: CookieOptionsWithName | undefined; cookies: CookieMethodsServer; cookieEncoding?: "raw" | ... 1 more ... | undefined; }'.
+      Property 'cookies' is missing in type '{ auth: { autoRefreshToken: false; persistSession: false; }; }' but required in type '{ cookieOptions?: CookieOptionsWithName | undefined; cookies: CookieMethodsServer; cookieEncoding?: "raw" | "base64url" | undefined; }'.
