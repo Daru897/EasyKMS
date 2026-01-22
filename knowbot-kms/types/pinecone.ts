@@ -7,29 +7,35 @@ import type { RecordMetadata } from '@pinecone-database/pinecone';
 /**
  * Vector metadata structure for document chunks
  * This should match what we store in Pinecone
+ *
+ * Note: We use a custom type instead of extending RecordMetadata
+ * to avoid TypeScript issues with optional properties.
  */
-export interface DocumentVectorMetadata extends RecordMetadata {
+export interface DocumentVectorMetadata {
   // Document identifiers
   document_id: string;
   document_version_id: string;
   tenant_id: string;
-  
+
   // Content information
   chunk_index: number;
   chunk_text: string;
   chunk_start_char?: number;
   chunk_end_char?: number;
-  
+
   // Document metadata
   document_title: string;
   document_status: 'DRAFT' | 'REVIEW' | 'LIVE' | 'ARCHIVED';
   effective_date?: string;
-  
+
   // Categories/tags
   categories?: string[];
-  
+
   // Timestamps
   indexed_at: string;
+
+  // Allow additional string-keyed properties for compatibility
+  [key: string]: string | number | boolean | string[] | undefined;
 }
 
 /**

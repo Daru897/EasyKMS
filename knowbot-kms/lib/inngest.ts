@@ -63,4 +63,20 @@ export const Events = {
       documentVersionId: 'string',
     },
   },
+  // Vector Indexing Events
+  'document/index': {
+    name: 'document/index',
+    data: {
+      tenantId: 'string',
+      documentId: 'string',
+      versionId: 'string',
+    },
+  },
+  'document/unindex': {
+    name: 'document/unindex',
+    data: {
+      tenantId: 'string',
+      versionId: 'string',
+    },
+  },
 } as const;

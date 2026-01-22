@@ -44,8 +44,12 @@ export const ingestDocument = inngest.createFunction(
     });
 
     // Step 3: Calculate content hash
+    // Note: Buffer gets serialized between steps, so we need to reconstruct it
     const contentHash = await step.run('calculate-hash', async () => {
-      return crypto.createHash('sha256').update(fileData.buffer).digest('hex');
+      const buffer = Buffer.isBuffer(fileData.buffer)
+        ? fileData.buffer
+        : Buffer.from((fileData.buffer as { data: number[] }).data);
+      return crypto.createHash('sha256').update(buffer).digest('hex');
     });
 
     // Step 4: Check for duplicate (same content hash)
@@ -76,7 +80,7 @@ export const ingestDocument = inngest.createFunction(
       return { isDuplicate: false };
     });
 
-    if (existingDoc.isDuplicate) {
+    if (existingDoc.isDuplicate && 'existingVersionId' in existingDoc) {
       return {
         success: true,
         message: 'Duplicate document detected, skipping ingestion',
@@ -87,7 +91,11 @@ export const ingestDocument = inngest.createFunction(
     // Step 5: Parse document with LlamaParse first
     const parsedContent = await step.run('parse-document', async () => {
       // Parse the document to get text content
-      return await parseDocument(fileData.buffer, fileData.mimeType);
+      // Note: Buffer gets serialized between steps, so we need to reconstruct it
+      const buffer = Buffer.isBuffer(fileData.buffer)
+        ? fileData.buffer
+        : Buffer.from((fileData.buffer as { data: number[] }).data);
+      return await parseDocument(buffer, fileData.mimeType);
     });
 
     // Step 6: PII Redaction on parsed text
@@ -118,7 +126,9 @@ export const ingestDocument = inngest.createFunction(
             title: fileMetadata.name || 'Untitled',
             mime_type: fileMetadata.mimeType || fileData.mimeType,
             file_extension: fileMetadata.name?.split('.').pop() || '',
-            file_size_bytes: fileMetadata.size ? parseInt(fileMetadata.size) : fileData.buffer.length,
+            file_size_bytes: fileMetadata.size ? parseInt(fileMetadata.size) : (
+              Buffer.isBuffer(fileData.buffer) ? fileData.buffer.length : (fileData.buffer as { data: number[] }).data.length
+            ),
             google_drive_metadata: {
               id: fileMetadata.id,
               name: fileMetadata.name,
@@ -150,12 +160,17 @@ export const ingestDocument = inngest.createFunction(
       }
 
       // Create document version
+      // Note: Buffer gets serialized between steps, so we need to reconstruct it
+      const fileBuffer = Buffer.isBuffer(fileData.buffer)
+        ? fileData.buffer
+        : Buffer.from((fileData.buffer as { data: number[] }).data);
+
       const { data: version, error: versionError } = await supabase
         .from('document_versions')
         .insert({
           document_id: docId,
           content_hash: contentHash,
-          raw_content_hash: crypto.createHash('sha256').update(fileData.buffer).digest('hex'),
+          raw_content_hash: crypto.createHash('sha256').update(fileBuffer).digest('hex'),
           parsed_markdown: redactedData.text, // Store redacted version
           word_count: redactedData.text.split(/\s+/).filter(w => w.length > 0).length,
           chunk_count: 0, // Will be set during indexing
@@ -166,7 +181,7 @@ export const ingestDocument = inngest.createFunction(
           sync_metadata: {
             file_name: fileMetadata.name,
             mime_type: fileData.mimeType,
-            file_size: fileData.buffer.length,
+            file_size: fileBuffer.length,
             ingested_at: new Date().toISOString(),
           },
         })

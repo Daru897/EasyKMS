@@ -34,7 +34,7 @@ export async function GET(request: Request) {
             name: indexName,
             dimension: stats.dimension,
             indexFullness: stats.indexFullness,
-            totalVectorCount: stats.totalVectorCount,
+            totalRecordCount: stats.totalRecordCount,
           },
           timestamp: new Date().toISOString(),
         });
@@ -168,7 +168,7 @@ export async function POST(request: Request) {
           action: 'query',
           message: 'Query executed successfully',
           result: {
-            matches: result.matches?.length || 0,
+            matchCount: result.matches?.length || 0,
             matches: result.matches?.slice(0, 3), // Return first 3 for brevity
           },
         });

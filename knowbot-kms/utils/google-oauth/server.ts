@@ -11,9 +11,9 @@ export interface GoogleTokenData {
   refresh_token?: string | null;
   token_type?: string;
   expires_at: Date;
-  scope?: string;
-  google_user_id?: string;
-  google_user_email?: string;
+  scope?: string | null;
+  google_user_id?: string | null;
+  google_user_email?: string | null;
 }
 
 /**

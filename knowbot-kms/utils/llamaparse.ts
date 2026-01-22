@@ -64,7 +64,9 @@ export async function parseDocument(
   try {
     // Upload file to LlamaParse
     const formData = new FormData();
-    const blob = new Blob([buffer], { type: mimeType });
+    // Convert Buffer to ArrayBuffer for Blob compatibility
+    const arrayBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength) as ArrayBuffer;
+    const blob = new Blob([arrayBuffer], { type: mimeType });
     formData.append('file', blob, 'document.pdf');
 
     const uploadResponse = await fetch(`${llamaparseApiUrl}/upload`, {

@@ -47,26 +47,16 @@ export async function GET(request: Request) {
       const drive = createDriveClient(tokens.access_token, tokens.refresh_token || undefined);
 
       // List folders (mimeType = 'application/vnd.google-apps.folder')
-      const { data, error } = await drive.files.list({
+      const response = await drive.files.list({
         q: "mimeType='application/vnd.google-apps.folder' and trashed=false",
         fields: 'files(id, name, parents, createdTime, modifiedTime)',
         orderBy: 'name',
         pageSize: 100,
       });
 
-      if (error) {
-        console.error('[Google Drive] Failed to list folders:', error);
-        // Return empty list with error message instead of throwing
-        return NextResponse.json({
-          success: true,
-          folders: [],
-          error: error.message || 'Failed to list folders',
-        });
-      }
-
       return NextResponse.json({
         success: true,
-        folders: data.files || [],
+        folders: response.data.files || [],
       });
     } catch (driveError) {
       console.error('[Google Drive] Drive API error:', driveError);

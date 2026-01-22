@@ -61,18 +61,14 @@ export const syncTenantDrive = inngest.createFunction(
       ];
 
       // List files in folder
-      const { data: files, error } = await drive.files.list({
+      const response = await drive.files.list({
         q: `'${syncFolderId}' in parents and trashed=false`,
         fields: 'files(id, name, mimeType, modifiedTime, size, createdTime)',
         orderBy: 'modifiedTime desc',
         pageSize: 100,
       });
 
-      if (error) {
-        throw new Error(`Failed to list files: ${error.message}`);
-      }
-
-      const fileList = files.files || [];
+      const fileList = response.data.files || [];
       const changes: Array<{
         type: 'new' | 'updated' | 'deleted';
         file: drive_v3.Schema$File;
@@ -82,10 +78,11 @@ export const syncTenantDrive = inngest.createFunction(
       for (const file of fileList) {
         if (!file.id || !file.name) continue;
 
+        const fileName = file.name;
         // Check if file type is allowed
-        const fileExtension = file.name.split('.').pop()?.toLowerCase();
+        const fileExtension = fileName.split('.').pop()?.toLowerCase();
         const isAllowed = allowedTypes.some((ext: string) =>
-          file.name.toLowerCase().endsWith(ext.toLowerCase())
+          fileName.toLowerCase().endsWith(ext.toLowerCase())
         );
 
         if (!isAllowed) {
