@@ -23,7 +23,9 @@ export interface DocumentVectorMetadata extends RecordMetadata {
   // Document metadata
   document_title: string;
   document_status: 'DRAFT' | 'REVIEW' | 'LIVE' | 'ARCHIVED';
-  effective_date?: string;
+  effective_date?: string | null;
+  effective_date_epoch?: number;
+  heading_context?: string;
   
   // Categories/tags
   categories?: string[];

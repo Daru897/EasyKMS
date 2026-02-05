@@ -18,7 +18,7 @@ export async function queryVectorsViaAPI(
   queryVector: number[],
   options: {
     topK?: number;
-    filter?: Record<string, any>;
+    filter?: Record<string, unknown>;
   } = {}
 ): Promise<Response> {
   const response = await fetch('/api/pinecone/query', {

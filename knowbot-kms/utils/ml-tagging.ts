@@ -20,6 +20,7 @@ export async function suggestCategories(
   text: string,
   tenantId: string
 ): Promise<string[]> {
+  void tenantId;
   const textLower = text.toLowerCase();
 
   // Common BPO categories and their keywords
@@ -112,6 +113,8 @@ export async function detectDuplicate(
   text: string,
   tenantId: string
 ): Promise<{ isDuplicate: boolean; similarDocumentId?: string; similarity?: number }> {
+  void text;
+  void tenantId;
   // Simple implementation: hash-based duplicate detection
   // Full implementation would use embeddings + similarity search
 

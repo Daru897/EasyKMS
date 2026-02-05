@@ -1,8 +1,7 @@
 'use client';
 
-import { Bell, Search, User } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { motion } from 'framer-motion';
 
 export default function Header() {
     const { user } = useAuth();

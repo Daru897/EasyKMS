@@ -18,8 +18,7 @@ import type {
  * Get the Pinecone index with tenant namespace
  */
 export async function getTenantIndex(tenantId: string): Promise<PineconeIndex<RecordMetadata>> {
-  const validatedTenantId = validateTenantId(tenantId);
-  const namespace = tenantIdToNamespace(validatedTenantId);
+  validateTenantId(tenantId);
   const client = getPineconeClient();
   const indexName = getPineconeIndexName();
   
@@ -78,7 +77,7 @@ export async function queryVectors(
   queryVector: number[],
   options: {
     topK?: number;
-    filter?: Record<string, any>;
+    filter?: Record<string, unknown>;
     includeMetadata?: boolean;
     includeValues?: boolean;
   } = {}
@@ -125,7 +124,7 @@ export async function deleteVectors(
   tenantId: string,
   options: {
     ids?: string[];
-    filter?: Record<string, any>;
+    filter?: Record<string, unknown>;
     deleteAll?: boolean;
   } = {}
 ): Promise<DeleteResponse> {
@@ -201,10 +200,9 @@ export async function fetchVectors(
  */
 export async function getNamespaceStats(tenantId: string): Promise<{
   vectorCount?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }> {
   const validatedTenantId = validateTenantId(tenantId);
-  const namespace = tenantIdToNamespace(validatedTenantId);
   const index = await getTenantIndex(validatedTenantId);
 
   try {

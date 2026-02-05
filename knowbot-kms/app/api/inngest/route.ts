@@ -3,6 +3,7 @@ import { inngest } from '@/lib/inngest';
 import { syncTenantDrive, handleNewFile, handleUpdatedFile, handleDeletedFile } from '@/inngest/functions';
 import { periodicSync } from '@/inngest/scheduled';
 import { ingestDocument } from '@/inngest/ingestion';
+import { indexDocument } from '@/inngest/indexing';
 
 /**
  * Inngest serve endpoint
@@ -22,5 +23,7 @@ export const { GET, POST } = serve({
     periodicSync,
     // Ingestion functions
     ingestDocument,
+    // Indexing functions
+    indexDocument,
   ],
 });

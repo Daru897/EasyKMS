@@ -1,6 +1,5 @@
 import { createServiceClient } from '@/utils/supabase/server';
-import { exchangeCodeForTokens, getGoogleUserInfo, refreshAccessToken } from '@/lib/google-oauth';
-import type { OAuth2Client } from 'google-auth-library';
+import { refreshAccessToken } from '@/lib/google-oauth';
 
 /**
  * Server-side utilities for managing Google OAuth tokens in database
@@ -15,6 +14,13 @@ export interface GoogleTokenData {
   google_user_id?: string;
   google_user_email?: string;
 }
+
+export type StoredGoogleToken = GoogleTokenData & {
+  id?: string;
+  tenant_id?: string;
+  is_active?: boolean;
+  expires_at: string | Date;
+};
 
 /**
  * Store OAuth tokens in database for a tenant
@@ -36,7 +42,7 @@ export async function storeGoogleTokens(
     id?: string | null;
     email?: string | null;
   }
-): Promise<any> {
+): Promise<StoredGoogleToken> {
   const supabase = createServiceClient();
 
   if (!tokens.access_token) {
@@ -90,7 +96,7 @@ export async function storeGoogleTokens(
  * @param tenantId - Tenant ID
  * @returns Token record or null
  */
-export async function getGoogleTokens(tenantId: string): Promise<any | null> {
+export async function getGoogleTokens(tenantId: string): Promise<StoredGoogleToken | null> {
   const supabase = createServiceClient();
 
   const { data, error } = await supabase

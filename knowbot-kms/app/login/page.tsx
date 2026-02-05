@@ -92,9 +92,10 @@ export default function LoginPage() {
         setMessage({ text: 'Login successful!', type: 'success' });
         // AuthContext will handle the redirect
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const messageText = error instanceof Error ? error.message : 'Unknown error';
       setMessage({
-        text: `Error: ${error.message}`,
+        text: `Error: ${messageText}`,
         type: 'error',
       });
     } finally {

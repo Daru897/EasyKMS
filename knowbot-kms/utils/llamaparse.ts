@@ -79,11 +79,15 @@ export async function parseDocument(
       throw new Error(`LlamaParse upload failed: ${uploadResponse.statusText}`);
     }
 
-    const uploadData = await uploadResponse.json();
+    const uploadData = (await uploadResponse.json()) as { id?: string };
     const jobId = uploadData.id;
 
+    if (!jobId) {
+      throw new Error('LlamaParse upload did not return a job id');
+    }
+
     // Poll for parsing result
-    let result: any = null;
+    let result: { status?: string; error?: string } | null = null;
     let attempts = 0;
     const maxAttempts = 30; // 30 seconds max wait
 
@@ -100,7 +104,7 @@ export async function parseDocument(
         throw new Error(`LlamaParse status check failed: ${statusResponse.statusText}`);
       }
 
-      result = await statusResponse.json();
+      result = (await statusResponse.json()) as { status?: string; error?: string };
 
       if (result.status === 'success') {
         break;
@@ -128,7 +132,12 @@ export async function parseDocument(
       throw new Error(`Failed to get LlamaParse result: ${contentResponse.statusText}`);
     }
 
-    const content = await contentResponse.json();
+    const content = (await contentResponse.json()) as {
+      markdown?: string;
+      text?: string;
+      pages?: number;
+      images?: unknown[];
+    };
     const markdown = content.markdown || content.text || '';
 
     return {
@@ -138,7 +147,7 @@ export async function parseDocument(
         wordCount: markdown.split(/\s+/).length,
         pageCount: content.pages,
         hasTables: markdown.includes('|'), // Simple table detection
-        hasImages: content.images?.length > 0,
+        hasImages: (content.images?.length || 0) > 0,
       },
     };
   } catch (error) {

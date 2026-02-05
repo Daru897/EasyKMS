@@ -12,19 +12,19 @@ export const createClient = () => {
         async get(name: string) {
           return (await cookieStore).get(name)?.value
         },
-        async set(name: string, value: string, options: any) {
+        async set(name: string, value: string, options: Record<string, unknown>) {
           try {
             ;(await cookieStore).set({ name, value, ...options })
-          } catch (error) {
+          } catch {
             // The `set` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.
           }
         },
-        async remove(name: string, options: any) {
+        async remove(name: string, options: Record<string, unknown>) {
           try {
             ;(await cookieStore).set({ name, value: '', ...options })
-          } catch (error) {
+          } catch {
             // The `remove` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.

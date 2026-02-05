@@ -157,6 +157,7 @@ export const ingestDocument = inngest.createFunction(
           content_hash: contentHash,
           raw_content_hash: crypto.createHash('sha256').update(fileData.buffer).digest('hex'),
           parsed_markdown: redactedData.text, // Store redacted version
+          search_text: `${fileMetadata.name || 'Untitled'}\n\n${redactedData.text}`,
           word_count: redactedData.text.split(/\s+/).filter(w => w.length > 0).length,
           chunk_count: 0, // Will be set during indexing
           status: 'DRAFT',

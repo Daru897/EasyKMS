@@ -6,7 +6,7 @@ import { createClient } from '@/utils/supabase/server';
  * List all tenants (for testing/selection)
  * In production, filter by user's access
  */
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();

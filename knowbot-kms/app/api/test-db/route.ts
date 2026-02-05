@@ -135,14 +135,15 @@ export async function GET(request: Request) {
       example: `${request.url}?action=health&limit=10`
     }, { status: 400 })
     
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
     console.error('❌ API Error:', err)
     
     return NextResponse.json({
       success: false,
       timestamp: new Date().toISOString(),
-      error: err.message,
-      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+      error: message,
+      stack: process.env.NODE_ENV === 'development' && err instanceof Error ? err.stack : undefined,
       duration: `${Date.now() - startTime}ms`
     }, { status: 500 })
   }
@@ -201,11 +202,12 @@ export async function POST(request: Request) {
       timestamp: new Date().toISOString()
     })
     
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
     return NextResponse.json({
       success: false,
       method: 'POST',
-      error: err.message,
+      error: message,
       duration: `${Date.now() - startTime}ms`
     }, { status: 500 })
   }

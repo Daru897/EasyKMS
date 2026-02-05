@@ -83,7 +83,6 @@ export const syncTenantDrive = inngest.createFunction(
         if (!file.id || !file.name) continue;
 
         // Check if file type is allowed
-        const fileExtension = file.name.split('.').pop()?.toLowerCase();
         const isAllowed = allowedTypes.some((ext: string) =>
           file.name.toLowerCase().endsWith(ext.toLowerCase())
         );

@@ -58,7 +58,7 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: 'Folder not found or access denied' },
         { status: 404 }

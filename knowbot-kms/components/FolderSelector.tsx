@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Folder {
   id: string;
@@ -27,13 +27,7 @@ export default function FolderSelector({
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(currentFolderId || null);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    if (tenantId) {
-      loadFolders();
-    }
-  }, [tenantId]);
-
-  const loadFolders = async () => {
+  const loadFolders = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -51,7 +45,13 @@ export default function FolderSelector({
     } finally {
       setLoading(false);
     }
-  };
+  }, [tenantId]);
+
+  useEffect(() => {
+    if (tenantId) {
+      loadFolders();
+    }
+  }, [tenantId, loadFolders]);
 
   const handleSave = async () => {
     if (!selectedFolderId) {

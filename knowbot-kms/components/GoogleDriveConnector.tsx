@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ConnectionStatus {
@@ -12,13 +12,11 @@ interface ConnectionStatus {
 
 interface GoogleDriveConnectorProps {
   tenantId: string;
-  onConnected?: () => void;
   onDisconnected?: () => void;
 }
 
 export default function GoogleDriveConnector({
   tenantId,
-  onConnected,
   onDisconnected,
 }: GoogleDriveConnectorProps) {
   const { user } = useAuth();
@@ -27,13 +25,7 @@ export default function GoogleDriveConnector({
   const [connecting, setConnecting] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
 
-  // Check connection status
-  useEffect(() => {
-    if (!tenantId) return;
-    checkStatus();
-  }, [tenantId]);
-
-  const checkStatus = async () => {
+  const checkStatus = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/google-oauth/status?tenantId=${tenantId}`);
@@ -50,7 +42,13 @@ export default function GoogleDriveConnector({
     } finally {
       setLoading(false);
     }
-  };
+  }, [tenantId]);
+
+  // Check connection status
+  useEffect(() => {
+    if (!tenantId) return;
+    checkStatus();
+  }, [tenantId, checkStatus]);
 
   const handleConnect = async () => {
     if (!tenantId) {

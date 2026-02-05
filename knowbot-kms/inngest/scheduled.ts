@@ -1,5 +1,4 @@
 import { inngest } from '@/lib/inngest';
-import { syncTenantDrive } from './functions';
 
 /**
  * Scheduled Inngest Functions

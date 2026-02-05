@@ -1,9 +1,14 @@
-# Update test-supabase.js to test insert again
-@"
+/* eslint-disable @typescript-eslint/no-require-imports */
+// test-supabase.js
 const { createClient } = require('@supabase/supabase-js')
 
-const supabaseUrl = 'https://ulqlsvhyietwmpdszebm.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVscWxzdmh5aWV0d21wZHN6ZWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4OTE0MjgsImV4cCI6MjA4MzQ2NzQyOH0.zMqwspjCO5I2iiiQHpH2CH5nOJ8ULohQFdYRMne4J68'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('❌ Missing Supabase credentials in .env.local')
+  process.exit(1)
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey)
 
@@ -12,7 +17,7 @@ async function testInsert() {
   
   const testTenant = {
     name: 'Development BPO',
-    slug: 'dev-bpo',
+    slug: `dev-bpo-${Date.now().toString().slice(-6)}`,
     subscription_tier: 'basic',
     settings: { sync_interval_minutes: 5 },
     is_active: true
@@ -30,7 +35,6 @@ async function testInsert() {
     console.log('✅ Insert successful!')
     console.log('Created tenant:', data[0])
     
-    // Now query to verify
     const { data: tenants, error: queryError } = await supabase
       .from('tenants')
       .select('*')
@@ -38,13 +42,10 @@ async function testInsert() {
     if (queryError) {
       console.log('Query error:', queryError.message)
     } else {
-      console.log(\`Total tenants: \${tenants.length}\`)
-      tenants.forEach(t => console.log(\` - \${t.name} (\${t.slug})\`))
+      console.log(`Total tenants: ${tenants.length}`)
+      tenants.forEach(t => console.log(` - ${t.name} (${t.slug})`))
     }
   }
 }
 
 testInsert()
-"@ | Set-Content -FilePath test-insert-final.js -Encoding UTF8
-
-node test-insert-final.js

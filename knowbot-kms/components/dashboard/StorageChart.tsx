@@ -1,7 +1,6 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { motion } from 'framer-motion';
 
 const data = [
     { name: 'Documents', value: 400, color: '#6366f1' }, // Indigo-500

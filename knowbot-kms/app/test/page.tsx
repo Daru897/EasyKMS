@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
 
@@ -17,7 +17,7 @@ type TestResult = {
   success: boolean
   message: string
   error?: string
-  data?: any
+  data?: unknown
 }
 
 export default function TestPage() {
@@ -46,17 +46,17 @@ export default function TestPage() {
         message: `Database connection successful. Found ${data[0]?.count || 0} tenants.`,
         data: data[0]
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       addResult({
         success: false,
         message: 'Database connection failed',
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       })
     }
     setLoading(false)
   }
 
-  const fetchTenants = async () => {
+  const fetchTenants = useCallback(async () => {
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -72,15 +72,15 @@ export default function TestPage() {
         message: `Fetched ${data.length} tenants successfully`,
         data: { count: data.length }
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       addResult({
         success: false,
         message: 'Failed to fetch tenants',
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       })
     }
     setLoading(false)
-  }
+  }, [supabase])
 
   const createTestTenant = async () => {
     setLoading(true)
@@ -106,11 +106,11 @@ export default function TestPage() {
         data: data[0]
       })
       fetchTenants() // Refresh list
-    } catch (error: any) {
+    } catch (error: unknown) {
       addResult({
         success: false,
         message: 'Failed to create test tenant',
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       })
     }
     setLoading(false)
@@ -120,13 +120,13 @@ export default function TestPage() {
     setLoading(true)
     try {
       // Test 1: Can we query tenants?
-      const { data: tenantsData, error: tenantsError } = await supabase
+      const { error: tenantsError } = await supabase
         .from('tenants')
         .select('*')
         .limit(1)
       
       // Test 2: Try to insert without proper permissions
-      const { error: insertError } = await supabase
+      await supabase
         .from('tenants')
         .insert([{ 
           name: 'RLS Test',
@@ -141,11 +141,11 @@ export default function TestPage() {
           : 'RLS test: Query allowed',
         error: tenantsError?.message
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       addResult({
         success: false,
         message: 'RLS test failed',
-        error: error.message
+        error: error instanceof Error ? error.message : 'Unknown error'
       })
     }
     setLoading(false)
@@ -157,7 +157,7 @@ export default function TestPage() {
 
   useEffect(() => {
     fetchTenants()
-  }, [])
+  }, [fetchTenants])
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -438,7 +438,7 @@ export default function TestPage() {
                     </svg>
                   </div>
                   <h4 className="text-lg font-medium text-gray-900 mb-2">No Tenants Found</h4>
-                  <p className="text-gray-500 mb-4">Click "Create Test Tenant" to add sample data.</p>
+                  <p className="text-gray-500 mb-4">Click &quot;Create Test Tenant&quot; to add sample data.</p>
                   <button
                     onClick={createTestTenant}
                     disabled={loading}

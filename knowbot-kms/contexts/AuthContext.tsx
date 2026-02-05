@@ -8,7 +8,7 @@ interface AuthContextType {
   session: Session | null;
   isLoading: boolean;
   signInWithMagicLink: (email: string) => Promise<void>;
-  signInWithPassword: (email: string, password: string) => Promise<any>;
+  signInWithPassword: (email: string, password: string) => Promise<Session | null>;
   signOut: () => Promise<void>;
 }
 
@@ -79,7 +79,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     if (error) throw error;
   };
 
-  const signInWithPassword = async (email: string, password: string) => {
+  const signInWithPassword = async (email: string, password: string): Promise<Session | null> => {
     console.log('signInWithPassword called for:', email);
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -93,7 +93,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       throw error;
     }
     
-    return data; // Return the data so login page can handle redirect
+    return data.session ?? null; // Return session so login page can handle redirect
   };
 
   const signOut = async () => {

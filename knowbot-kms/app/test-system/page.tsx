@@ -7,7 +7,7 @@ interface TestResult {
   name: string;
   status: 'pending' | 'running' | 'success' | 'error';
   message?: string;
-  data?: any;
+  data?: unknown;
 }
 
 export default function TestSystemPage() {
@@ -36,10 +36,10 @@ export default function TestSystemPage() {
         message: data.success ? 'Connected' : data.error,
         data,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       updateResult('Database', {
         status: 'error',
-        message: error.message,
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   };
@@ -54,10 +54,10 @@ export default function TestSystemPage() {
         message: data.success ? 'Connected' : data.error,
         data,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       updateResult('Pinecone', {
         status: 'error',
-        message: error.message,
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   };
@@ -78,10 +78,10 @@ export default function TestSystemPage() {
           : 'Not connected',
         data,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       updateResult('Google Drive', {
         status: 'error',
-        message: error.message,
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   };
@@ -102,10 +102,10 @@ export default function TestSystemPage() {
           : data.error,
         data,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       updateResult('Sync Status', {
         status: 'error',
-        message: error.message,
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   };
@@ -127,10 +127,10 @@ export default function TestSystemPage() {
         message: `${docCount} document(s) found`,
         data: { count: docCount },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       updateResult('Documents', {
         status: 'error',
-        message: error.message,
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   };
@@ -264,7 +264,7 @@ export default function TestSystemPage() {
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-semibold mb-4">Test Results</h2>
           {results.length === 0 ? (
-            <p className="text-gray-500">No tests run yet. Click "Run All Tests" to start.</p>
+            <p className="text-gray-500">No tests run yet. Click &quot;Run All Tests&quot; to start.</p>
           ) : (
             <div className="space-y-3">
               {results.map((result) => (

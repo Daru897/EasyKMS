@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { inngest } from '@/lib/inngest';
 import { createServiceClient } from '@/utils/supabase/server';
-import crypto from 'crypto';
 
 /**
  * POST /api/google-drive/webhook
@@ -116,7 +115,7 @@ export async function POST(request: Request) {
  * Webhook verification endpoint
  * Google Drive sends a GET request to verify the webhook URL
  */
-export async function GET(request: Request) {
+export async function GET() {
   // Google Drive webhook verification
   // Just return 200 OK to verify the endpoint exists
   return NextResponse.json({

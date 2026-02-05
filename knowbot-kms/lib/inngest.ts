@@ -63,4 +63,14 @@ export const Events = {
       documentVersionId: 'string',
     },
   },
+  // Document Indexing Events (Vector embeddings)
+  'document/index': {
+    name: 'document/index',
+    data: {
+      tenantId: 'string',
+      documentId: 'string',
+      documentVersionId: 'string',
+      title: 'string',
+    },
+  },
 } as const;

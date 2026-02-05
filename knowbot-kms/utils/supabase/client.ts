@@ -17,7 +17,7 @@ export type Database = {
           slug: string
           google_drive_folder_id: string | null
           subscription_tier: 'basic' | 'pro' | 'enterprise'
-          settings: Record<string, any>
+          settings: Record<string, unknown>
           is_active: boolean
           created_at: string
           updated_at: string
@@ -28,7 +28,7 @@ export type Database = {
           slug: string
           google_drive_folder_id?: string | null
           subscription_tier?: 'basic' | 'pro' | 'enterprise'
-          settings?: Record<string, any>
+          settings?: Record<string, unknown>
           is_active?: boolean
           created_at?: string
           updated_at?: string
@@ -39,7 +39,7 @@ export type Database = {
           slug?: string
           google_drive_folder_id?: string | null
           subscription_tier?: 'basic' | 'pro' | 'enterprise'
-          settings?: Record<string, any>
+          settings?: Record<string, unknown>
           is_active?: boolean
           created_at?: string
           updated_at?: string
@@ -56,7 +56,7 @@ export type Database = {
           file_size_bytes: number | null
           current_version_id: string | null
           current_status: 'DRAFT' | 'REVIEW' | 'LIVE' | 'ARCHIVED'
-          google_drive_metadata: Record<string, any> | null
+          google_drive_metadata: Record<string, unknown> | null
           last_synced_at: string | null
           sync_status: 'pending' | 'syncing' | 'synced' | 'failed'
           sync_error: string | null
