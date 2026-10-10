@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: easykms-demo
+    runtime: docker
+    plan: starter
+    rootDir: web
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    numInstances: 1
+    disk:
+      name: easykms-data
+      mountPath: /app/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_PATH
+        value: /app/data/easykms.sqlite
+      - key: APP_ORIGIN
+        sync: false
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: HOSTNAME
+        value: 0.0.0.0
+      - key: PORT
+        value: "3000"
+      - key: MAX_DEMO_WORKSPACES
+        value: "1000"

@@ -1,0 +1,11 @@
+node_modules/
+.next/
+*.tsbuildinfo
+web/next-env.d.ts
+web/data/
+web/test-results/
+web/playwright-report/
+.env*
+!.env.example
+.DS_Store
+web/evals/live-report.json

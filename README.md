@@ -1,169 +1,101 @@
-# IKMS - BPO Knowledge Management & Agent Assist Platform
+# EasyKMS
 
-A central Knowledge Operating System for BPOs that integrates with Google Drive, indexes SOPs into an AI-queryable format, enforces strict governance, and delivers instant, hallucination-free answers to agents.
+**Clarity for every conversation.** A knowledge workspace for customer-support teams and BPOs: find approved policies, improve missing guidance, and publish with a traceable review workflow.
 
----
+The modern portfolio release lives in **`web/`**. It runs without cloud credentials or paid AI services. The previous implementation remains in `knowbot-kms/` as historical reference; its setup and readiness claims do not apply to this release.
 
-## 🚀 Quick Start
+## Run locally
 
-### Prerequisites
-- Node.js v18+
-- Supabase account
-- Pinecone account
-- Google Cloud account
-- OpenAI account
+Requires **Node.js 24.x** (uses built-in SQLite).
 
-### Installation
-
-```bash
-# Clone repository
-git clone <repo-url>
-cd IKMS/knowbot-kms
-
-# Install dependencies
-npm install
-
-# Configure environment
-cp .env.example .env.local
-# Edit .env.local with your credentials
-
-# Start development
+```sh
+cd web
+npm ci
 npm run dev
 ```
 
-**Full setup guide**: [docs/01-GETTING-STARTED.md](./docs/01-GETTING-STARTED.md)
+Open [localhost:3000](http://localhost:3000) for the landing page or [/demo](http://localhost:3000/demo) for the sandbox. For a production build:
 
----
-
-## 📚 Documentation
-
-Complete documentation is available in the `/docs` folder:
-
-- **[00-PROJECT-OVERVIEW.md](./docs/00-PROJECT-OVERVIEW.md)** - Vision, tech stack, progress
-- **[01-GETTING-STARTED.md](./docs/01-GETTING-STARTED.md)** - Setup & installation
-- **[02-ARCHITECTURE.md](./docs/02-ARCHITECTURE.md)** - System design & patterns
-- **[03-DEVELOPMENT-GUIDE.md](./docs/03-DEVELOPMENT-GUIDE.md)** - Implementation details
-- **[04-TESTING.md](./docs/04-TESTING.md)** - Testing procedures
-- **[05-API-REFERENCE.md](./docs/05-API-REFERENCE.md)** - Complete API docs
-
-**Start here**: [docs/README.md](./docs/README.md)
-
----
-
-## ✨ Key Features
-
-### ✅ Implemented
-- **Multi-Tenant Security** - Row-level security + namespace isolation
-- **Google Drive Integration** - OAuth 2.0, automatic file sync
-- **Document Ingestion** - Parse, redact PII, auto-categorize
-- **Approval Workflow** - Draft → Review → Live → Archived
-- **Vector Indexing** - Semantic search with Pinecone
-- **Version Control** - Full version history & audit trail
-
-### ⏳ In Progress
-- **Query Engine** - Hybrid search + hallucination prevention
-- **Agent Interface** - Clean search cockpit
-- **Admin Dashboard** - Sync status, approval queue, analytics
-
----
-
-## 🏗️ Architecture
-
-```
-Google Drive → Sync Watcher → Ingestion Pipeline → Approval Workflow
-                                                          ↓
-                                                    Vector Indexing
-                                                          ↓
-                                                   Query Engine (Stage 5)
+```sh
+npm run build
+HOSTNAME=127.0.0.1 PORT=3000 npm start
 ```
 
-**Full architecture**: [docs/02-ARCHITECTURE.md](./docs/02-ARCHITECTURE.md)
+The production server runs from `.next/standalone`. The start wrapper keeps its database in `web/data/easykms.sqlite`, outside the build directory, so rebuilds preserve your workspace. Development uses the same default location. Set an absolute `DATABASE_PATH` to override it. Docker sets an absolute volume path automatically.
 
----
+## New: public showcase and configurable team mode
 
-## 🛠️ Tech Stack
+- `/walkthrough`: guided interactive text tour.
+- `/case-study`: portfolio product case study.
+- `/setup`: first-run demo setup and Markdown/CSV draft import.
+- `/team`: configurable Supabase Auth + managed Postgres workspaces, enforced roles, and email-bound invitations.
+- `render.yaml`: Render deployment template, not yet deployed.
+- Optional Google Drive draft imports and gated AI-assisted retrieval.
 
-- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes, Inngest (job queue)
-- **Database**: Supabase (PostgreSQL) with Row-Level Security
-- **Vector DB**: Pinecone with namespace isolation
-- **Integrations**: Google Drive API, OpenAI, LlamaParse
+See [Team setup and integration limits](docs/TEAM-SETUP.md) for activation instructions. These cloud paths are implemented and locally tested, but hosted accounts and live provider behavior have not been validated. AI remains disabled pending a live evaluation.
 
----
+## The two-minute demo
 
-## 📊 Project Status
+1. Ask **“What is our refund policy?”** View the direct excerpts and open their sources.
+2. Ask **“Does the warranty cover accidental water damage?”** Watch the question become a knowledge gap.
+3. Create a warranty policy in the library and submit the draft for review.
+4. Approve and publish it in the review queue. Ask the question again.
+5. Link the policy to the gap, mark it resolved, and inspect the activity and insights.
 
-**Overall Completion**: ~65% (78/120 hours)
+Every browser receives an independent demo workspace. Data persists on the server for seven days from first visit. Use fictional content; this is an anonymous showcase, not enterprise authentication.
 
-- ✅ **Stage 1**: Database schema & governance (Complete)
-- ✅ **Stage 2**: Multi-tenant security & auth (Complete)
-- ✅ **Stage 3**: Google Drive sync & ingestion (Complete)
-- ✅ **Stage 4**: Approval workflow & indexing (Complete)
-- ⏳ **Stage 5**: Query engine (In Progress)
-- ⏳ **Stage 6**: UI completion (Planned)
+## What works
 
-**Progress details**: [docs/00-PROJECT-OVERVIEW.md](./docs/00-PROJECT-OVERVIEW.md#project-progress)
+- Responsive agent workspace with full-text search across approved, current policies.
+- Source excerpts, policy metadata, feedback, and copy-to-clipboard.
+- Policy creation, editing, review, changes requested, publishing, and archival.
+- Draft revisions keep the current published version live until replacement is approved.
+- Automatic knowledge gaps, duplicate request counts, and resolution linked to a policy.
+- Real usage and feedback metrics, governance activity, JSON export, and workspace reset.
+- Persistent SQLite storage, bounded anonymous sessions, input validation, origin checks, and rate limits.
+- Automated workflow, API, browser, and accessibility checks.
 
----
+Search is deliberately **extractive**. It retrieves policy text; it does not generate an LLM answer or claim answer correctness. English lexical retrieval has limits; see [architecture](docs/SHOWCASE-ARCHITECTURE.md).
 
-## 🧪 Testing
+## Stack
 
-### Quick Health Check
+Next.js 16.4 · React 19.3 · TypeScript · Node.js 24 · SQLite FTS5 · Zod · Lucide · Playwright. Exact versions are pinned in `web/package.json` and its lockfile. No separate vector database, job service, auth account, or document parser is required for this demo.
 
-```bash
-# Start services
-npm run dev                    # Terminal 1
-npx inngest-cli dev           # Terminal 2
+## Deploy
 
-# Run tests
-npm run test:health           # Or visit: http://localhost:3000/test-system
+```sh
+# From repository root
+docker compose up --build -d
 ```
 
-**Testing guide**: [docs/04-TESTING.md](./docs/04-TESTING.md)
+Open [localhost:3000](http://localhost:3000). A named volume preserves the database. This release targets **one Node/container instance with persistent disk**, not an ephemeral serverless filesystem. Set `APP_ORIGIN` to the actual public HTTPS origin and `COOKIE_SECURE=true` behind a TLS reverse proxy.
 
----
+Read the [deployment runbook](docs/DEPLOYMENT.md) before hosting. No cloud resources have been provisioned by this change.
 
-## 🔌 API Reference
+## Verify
 
-Key endpoints:
+```sh
+cd web
+npm run lint
+npm run format:check
+npm run typecheck
+npm test
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
 
-- **Documents**: `/api/documents` - List, approve, reject
-- **Google Drive**: `/api/google-drive/sync` - Trigger sync
-- **OAuth**: `/api/google-oauth/authorize` - Connect Google Drive
-- **Pinecone**: `/api/pinecone/test` - Test vector DB
+## Product and engineering context
 
-**Full API docs**: [docs/05-API-REFERENCE.md](./docs/05-API-REFERENCE.md)
+- [Product brief and delivery roadmap](docs/PRODUCT-BRIEF.md)
+- [Repository audit](docs/REPOSITORY-AUDIT.md)
+- [Architecture and API](docs/SHOWCASE-ARCHITECTURE.md)
+- [Deployment and operations](docs/DEPLOYMENT.md)
+- [Validation results](docs/VALIDATION.md)
+- [Team mode, imports, Drive, and AI setup](docs/TEAM-SETUP.md)
 
----
+Legacy docs under `docs/00-*` through `docs/05-*`, `docs/archive/`, and the existing SQL files describe the prior cloud-dependent implementation. They have not been revalidated as production-ready.
 
-## 🤝 Contributing
+## License
 
-1. Read the [Architecture Guide](./docs/02-ARCHITECTURE.md#feature-addition-patterns)
-2. Follow [Safe Feature Addition Patterns](./docs/02-ARCHITECTURE.md#pattern-1-adding-a-new-dashboard-section)
-3. Write tests ([Testing Guide](./docs/04-TESTING.md))
-4. Submit PR with documentation updates
-
----
-
-## 🐛 Troubleshooting
-
-Common issues and solutions: [docs/04-TESTING.md#troubleshooting](./docs/04-TESTING.md#troubleshooting)
-
----
-
-## 📝 License
-
-[Your License Here]
-
----
-
-## 🔗 Links
-
-- **Documentation**: [/docs](./docs)
-- **Supabase**: [app.supabase.com](https://app.supabase.com)
-- **Pinecone**: [app.pinecone.io](https://app.pinecone.io)
-- **Inngest**: [app.inngest.com](https://app.inngest.com)
-
----
-
-*For detailed information, see the [complete documentation](./docs/README.md).*
+The repository does not currently declare a license. Choose one before offering reuse rights to third parties.

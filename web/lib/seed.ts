@@ -1,0 +1,148 @@
+import type { Workspace, Article } from "./types";
+export function seedWorkspace(): Workspace {
+  const now = new Date();
+  const ago = (days: number) =>
+    new Date(now.getTime() - days * 86400000).toISOString();
+  const review = new Date(now.getTime() + 30 * 86400000)
+    .toISOString()
+    .slice(0, 10);
+  const article = (
+    id: string,
+    title: string,
+    category: string,
+    summary: string,
+    content: string,
+    status: Article["status"],
+    version: number,
+    days: number,
+    owner: string,
+  ): Article => ({
+    id,
+    title,
+    category,
+    summary,
+    content,
+    status,
+    version,
+    updatedAt: ago(days),
+    owner,
+    reviewDate: review,
+  });
+  return {
+    articles: [
+      article(
+        "refunds",
+        "Refunds & return eligibility",
+        "Billing & payments",
+        "A clear path for return requests, refund timelines, and exceptions.",
+        "Customers can return unused products within 30 days of delivery. Ask for the order number and confirm the delivery date before starting a return.\n\nRefunds are issued to the original payment method within 5–7 business days after the returned item passes inspection. Shipping fees are not refundable unless the item arrived damaged or incorrect.\n\nFor damaged items, request a photo and offer a replacement or a full refund, including shipping. Escalate requests outside the 30-day window to a team lead. Never promise an exception before approval.",
+        "Published",
+        3,
+        1,
+        "Priya Sharma",
+      ),
+      article(
+        "password",
+        "Account access & password reset",
+        "Account & security",
+        "Help customers regain access while keeping their account secure.",
+        "Direct the customer to Sign in → Forgot password. They must enter the email address associated with their account. The reset link expires after 30 minutes.\n\nIf the email does not arrive, ask them to check spam and confirm the address. Wait 5 minutes before requesting another link.\n\nNever ask for a password, one-time code, or full payment card details. If the customer cannot access their registered email, escalate to the account recovery team for identity verification.",
+        "Published",
+        2,
+        3,
+        "Alex Morgan",
+      ),
+      article(
+        "shipping",
+        "Delayed or missing deliveries",
+        "Orders & shipping",
+        "Track late orders and resolve packages marked as delivered.",
+        "Check the tracking number and the promised delivery date. If the order is less than 2 business days late, share the tracking link and ask the customer to wait until that window ends.\n\nIf the delay exceeds 2 business days, open a carrier investigation and provide a case reference. Follow up with the customer within 24 hours.\n\nFor a package marked delivered but not received, confirm the shipping address and ask the customer to check with neighbors or reception. If it is still missing after 24 hours, escalate to logistics for a replacement or refund decision.",
+        "Published",
+        4,
+        2,
+        "Priya Sharma",
+      ),
+      article(
+        "escalation",
+        "When and how to escalate a case",
+        "Agent playbooks",
+        "Route complex cases to the right team with complete context.",
+        "Escalate suspected account compromise to the security team immediately. Route payment disputes and duplicate charges to billing. Send delivery investigations to logistics.\n\nInclude the order or account reference, a concise issue summary, troubleshooting already completed, and the customer’s preferred contact method. Do not include passwords or complete card numbers.\n\nTell the customer that a specialist will review their case. Standard escalations receive an initial response within 1 business day. Do not promise a final resolution time.",
+        "Published",
+        2,
+        5,
+        "Alex Morgan",
+      ),
+      article(
+        "cancel",
+        "Cancel or change an order",
+        "Orders & shipping",
+        "What agents can change before an order leaves the warehouse.",
+        "Orders can be canceled or updated before their status changes to Dispatched. Verify the order number and check the fulfillment status.\n\nFor an eligible cancellation, confirm the customer’s request and submit it in the order system. Payment authorizations are typically released within 3–5 business days.\n\nOnce an order is dispatched, address changes and cancellations are unavailable. Explain the return process after delivery. Do not guarantee that the carrier can reroute a parcel.",
+        "Published",
+        1,
+        6,
+        "Sam Rivera",
+      ),
+      article(
+        "duplicate",
+        "Duplicate charge investigation",
+        "Billing & payments",
+        "Distinguish pending authorizations from settled duplicate payments.",
+        "Check whether both charges are settled. A pending authorization is not a completed payment and usually clears within 3–5 business days.\n\nIf two settled charges exist for one order, collect the transaction dates and last four card digits, then escalate to billing. Never request a full card number.\n\nThe billing team reviews duplicate charges within 2 business days. Inform the customer that any confirmed duplicate will be refunded to the original payment method.",
+        "Published",
+        2,
+        4,
+        "Sam Rivera",
+      ),
+      article(
+        "subscription",
+        "Subscription pause policy",
+        "Account & security",
+        "Proposed guidance for customers who need a temporary break.",
+        "Customers on monthly plans may pause their subscription for up to 60 days. The pause starts at the next billing date.\n\nAnnual subscriptions are not eligible for a pause. Offer an account review with the retention team instead.\n\nConfirm that scheduled deliveries during the pause are canceled and explain when billing will resume.",
+        "In review",
+        1,
+        0,
+        "Priya Sharma",
+      ),
+      article(
+        "international",
+        "International return shipping",
+        "Orders & shipping",
+        "A draft policy for cross-border return requests.",
+        "International return requests must be reviewed by the logistics team. Collect the order number, destination country, and reason for return.\n\nDo not promise prepaid labels or customs reimbursement until the logistics team confirms eligibility.",
+        "Draft",
+        1,
+        2,
+        "Sam Rivera",
+      ),
+    ],
+    gaps: [
+      {
+        id: "gap-warranty",
+        question: "Does the warranty cover accidental water damage?",
+        status: "Open",
+        count: 4,
+        createdAt: ago(1),
+      },
+      {
+        id: "gap-gift",
+        question: "Can a gift recipient return an order without a receipt?",
+        status: "Open",
+        count: 2,
+        createdAt: ago(2),
+      },
+    ],
+    activity: [
+      {
+        id: "activity-seed",
+        action: "Demo workspace created",
+        detail: "Six published policies and two drafts are ready to explore.",
+        createdAt: ago(0),
+      },
+    ],
+    searches: [],
+  };
+}
