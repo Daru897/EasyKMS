@@ -1,6 +1,23 @@
 # EasyKMS
 
-**Clarity for every conversation.** A knowledge workspace for customer-support teams and BPOs: find approved policies, improve missing guidance, and publish with a traceable review workflow.
+**A knowledge management workspace for customer-support teams and BPOs.** EasyKMS brings policy search, content review, and knowledge-gap tracking into one workflow: find approved guidance, identify what is missing, and review and publish the next revision.
+
+## Product preview
+
+![EasyKMS demo workspace showing policy search, knowledge categories, the review queue, knowledge gaps, and workspace activity](docs/showcase-desktop.png)
+
+*Actual application screenshot using fictional demo content. The agent workspace brings approved knowledge and outstanding review work into view; the sidebar connects the knowledge library, review queue, gaps, and insights.*
+
+[View full-size screenshot](docs/showcase-desktop.png) · [Mobile preview](docs/showcase-mobile.png) · [Product brief](docs/PRODUCT-BRIEF.md) · [Validation results](docs/VALIDATION.md)
+
+### What this project demonstrates
+
+- **Product and workflow design:** a complete knowledge lifecycle, from an unanswered question to reviewed guidance and a resolved gap.
+- **Content governance:** draft revisions, approval before publication, source visibility, and traceable activity.
+- **Implementation and validation:** a responsive Next.js application with persistent storage and automated workflow, API, browser, and accessibility checks.
+- **Adoption planning:** guided setup, Markdown/CSV import, a walkthrough, and deployment documentation.
+
+**Status:** functional portfolio build. The local demo needs no cloud credentials; hosted deployment and live integration validation remain future milestones. Search returns source excerpts, while optional AI-assisted retrieval remains disabled pending live evaluation.
 
 The modern portfolio release lives in **`web/`**. It runs without cloud credentials or paid AI services. The previous implementation remains in `knowbot-kms/` as historical reference; its setup and readiness claims do not apply to this release.
 
